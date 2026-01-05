@@ -41,7 +41,7 @@ INSERT INTO boisson (nom, id_marque) VALUES
 ('Lipton Peach',4),
 ('Monster energy ultra gold',3),
 ('Monster energy ultra blue',3),
-('Eau de source',2);
+('Eau de source',2)
 
 INSERT INTO focaccia (nom, prix) VALUES
 ('Mozaccia', 9.80),
