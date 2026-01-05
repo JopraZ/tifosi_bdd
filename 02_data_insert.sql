@@ -4,31 +4,32 @@ INSERT INTO marque (nom) VALUES
 ('Monster'),
 ('Pepsico');
 
-INSERT INTO ingredient (nom) VALUES
-('Ail'),
-('Ananas'),
-('Artichaut'),
-('Bacon'),
-('Base Tomate'),
-('Base crème'),
-('Champignon'),
-('Chevre'),
-('Cresson'),
-('Emmental'),
-('Gorgonzola'),
-('Jambon cuit'),
-('Jambon fumé'),
-('Oeuf'),
-('Oignon'),
-('Olive noire'),
-('Olive verte'),
-('Piment'),
-('Poivre'),
-('Pomme de terre'),
-('Raclette'),
-('Salami'),
-('Tomate cerise'),
-('Mozarella');
+INSERT INTO ingredient (nom, quantite_default_g) VALUES
+('Ail', 2),
+('Ananas', 40),
+('Artichaut', 20),
+('Bacon', 80),
+('Base Tomate', 200),
+('Base crème', 200),
+('Champignon', 40),
+('Chevre', 50),
+('Cresson', 20),
+('Emmental', 50),
+('Gorgonzola', 50),
+('Jambon cuit', 80),
+('Jambon fumé', 80),
+('Oeuf', 50),
+('Oignon', 20),
+('Olive noire', 20),
+('Olive verte', 20),
+('Parmesan',50),
+('Piment',2),
+('Poivre',1),
+('Pomme de terre', 80),
+('Raclette', 50),
+('Salami', 80),
+('Tomate cerise', 40),
+('Mozarella', 50 );
 
 INSERT INTO boisson (nom, id_marque) VALUES
 ('Fanta citron',1),
@@ -58,8 +59,8 @@ INSERT INTO focaccia (nom, prix) VALUES
 
 -- Mozaccia --
 
-INSERT INTO comprend (id_focaccia, id_ingredient)
-SELECT f.id_focaccia, i.id_ingredient
+INSERT INTO comprend (id_focaccia, id_ingredient, quantite)
+SELECT f.id_focaccia, i.id_ingredient, i.quantite_default_g
 FROM focaccia f
 JOIN ingredient i
 WHERE f.nom ='Mozaccia'
@@ -73,8 +74,8 @@ AND i.nom IN (
     'champignon', 
     'parmesan', 
     'poivre', 
-    'olive noire';
-)
+    'olive noire'
+);
 
 -- Gorgonzollaccia --
 
@@ -91,8 +92,8 @@ AND i.nom IN (
     'champignon', 
     'parmesan', 
     'poivre', 
-    'olive noire';
-)
+    'olive noire'
+);
 
 -- Raclaccia -- 
 
@@ -108,8 +109,8 @@ AND i.nom IN (
     'ail',
     'champignon',
     'parmesan',
-    'poivre';
-)
+    'poivre'
+);
 
 -- Emmentalaccia -- 
 
@@ -125,8 +126,8 @@ AND i.nom IN (
     'champignon',
     'parmesan',
     'poivre',
-    'oignon';
-)
+    'oignon'
+);
 
 -- Tradizione -- 
 
@@ -144,8 +145,20 @@ AND i.nom IN (
     'parmesan',
     'poivre',
     'olive noire',
-    'olive verte';
-)
+    'olive verte'
+);
+
+UPDATE comprend c
+JOIN focaccia f ON c.id_focaccia = f.id_focaccia
+JOIN ingredient i ON c.id_ingredient = i.id_ingredient
+
+SET c.quantite_override_g = CASE i.nom
+    WHEN 'champignon' THEN 80
+    WHEN 'olive noire' THEN 10
+    WHEN 'olive verte' THEN 10
+END
+WHERE f.nom = 'Tradizione'
+AND i.nom IN ('champignon','olive noire','olive verte');
 
 -- Hawaienne -- 
 
@@ -163,8 +176,8 @@ AND i.nom IN(
     'piment',
     'parmesan',
     'poivre',
-    'olive noire';
-)
+    'olive noire'
+);
 
 -- Américaine --
 
@@ -172,7 +185,7 @@ INSERT INTO comprend (id_focaccia, id_ingredient)
 SELECT f.id_focaccia, i.id_ingredient
 FROM focaccia f
 JOIN ingredient i
-WHERE f.nom ='Hawaienne'
+WHERE f.nom ='Américaine'
 AND i.nom IN (
     'Base tomate',
     'Mozarella',
@@ -181,8 +194,18 @@ AND i.nom IN (
     'pomme de terre',
     'parmesan',
     'poivre',
-    'olive noire';
-)
+    'olive noire'
+);
+
+UPDATE comprend c
+JOIN focaccia f ON c.id_focaccia = f.id_focaccia
+JOIN ingredient i ON c.id_ingredient = i.id_ingredient
+
+SET c.quantite_override_g = CASE i.nom
+    WHEN 'pomme de terre' THEN 40
+END
+WHERE f.nom = 'Américaine'
+AND i.nom IN ('pomme de terre');
 
 -- Paysanne --
 
@@ -203,5 +226,5 @@ AND i.nom IN(
     'parmesan',
     'poivre',
     'olive noire',
-    'œuf';
-)
+    'œuf'
+);
